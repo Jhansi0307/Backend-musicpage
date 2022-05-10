@@ -40,21 +40,25 @@ module.exports.postData = async (req, res, next) => {
   }
 };
 
+
+
+
+
 module.exports.updateData = async (req, res, next) => {
-  const id = req.params.id;
-  const user = await mongo.db.collection("Users").findOne({ id: id });
-  console.log(req.body);
-  if (user) {
-    var data = await mongo.db
+  try {
+    var response = await mongo.db
       .collection("Users")
-      .updateOne(
-        { name: req.body.name },
-        { id: req.body.id },
-        { providerid: req.body.providerid }
+      .findOneAndUpdate(
+        { id: req.params.id },
+        { $set: { ...req.body } },
+        { returnNewDocument: true }
       );
-    return res.send(data);
-  } else {
-    console.log("not updated");
+
+    res.send(response);
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).send(err);
   }
 };
 
