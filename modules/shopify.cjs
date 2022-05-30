@@ -1,13 +1,16 @@
 const { ObjectId } = require("mongodb");
-const mongo = require("./connect.cjs");
+const mongo = require("../connect.cjs");
+
+//---------------------------------------Getting Shopifystores data---------------------------//>
+
 // --- GET all data
-module.exports.getData = async (req, res, next) => {
-  let data = await mongo.db.collection("Users").find().toArray();
+module.exports.getShopifyData = async (req, res, next) => {
+  let data = await mongo.db.collection("Shopify").find().toArray();
   res.send(data);
 };
 
 // get the data by Id
-module.exports.getId = async (req, res, next) => {
+module.exports.getShopifyId = async (req, res, next) => {
   const id = req.params.id;
   // let data = await mongo.db.collection("Users").findOne({ _id: ObjectId(id)});
   // const data = await mongo.db
@@ -15,7 +18,9 @@ module.exports.getId = async (req, res, next) => {
   //   .findOne({ _id: ObjectId(id) });
   // const {id}=req.body
 
-  let data = await mongo.db.collection("Users").findOne({ id: id });
+  let data = await mongo.db
+    .collection("Shopify")
+    .findOne({ _id: ObjectId(id) });
   // console.log(data);
   // console.log(id);
   res.send(data);
@@ -25,31 +30,27 @@ module.exports.getId = async (req, res, next) => {
 };
 
 //post the data
-module.exports.postData = async (req, res, next) => {
-  const { name, providerid } = req.body;
-  const user = await mongo.db.collection("Users").findOne({ name: name });
+module.exports.postShopifyData = async (req, res, next) => {
+  const { name } = req.body;
+  const user = await mongo.db.collection("Shopify").findOne({ name: name });
 
   if (user) {
-    var data = await mongo.db.collection("Users").insertOne(req.body);
+    var data = await mongo.db.collection("Shopify").insertOne(req.body);
     return res.send(data);
   } else {
     //  res.status(401).send("invalid credential")
 
-    var data = await mongo.db.collection("Users").insertOne(req.body);
+    var data = await mongo.db.collection("Shopify").insertOne(req.body);
     return res.send(data);
   }
 };
 
-
-
-
-
-module.exports.updateData = async (req, res, next) => {
+module.exports.updateShopifyData = async (req, res, next) => {
   try {
     var response = await mongo.db
-      .collection("Users")
+      .collection("Shopify")
       .findOneAndUpdate(
-        { id: req.params.id },
+        { _id: ObjectId(req.params.id) },
         { $set: { ...req.body } },
         { returnNewDocument: true }
       );
@@ -61,6 +62,26 @@ module.exports.updateData = async (req, res, next) => {
     res.status(500).send(err);
   }
 };
+
+
+
+module.exports.searchedData = async (req, res, next) => {
+  const id = req.params.name;
+
+  let data = await mongo.db
+    .collection("Shopify")
+    .find({ name: req.params.name })
+    .toArray();
+  console.log(data);
+  // console.log(id);
+  res.send(data);
+  // console.log(data);
+
+  // res.send(data);
+};
+
+
+//---------------------------------------Getting Shopoifystores data---------------------------//>
 
 // import express from "express";
 // import cors from "cors";

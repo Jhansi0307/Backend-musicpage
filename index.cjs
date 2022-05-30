@@ -2,42 +2,74 @@ const express = require("express");
 const cors = require("cors");
 const mongo = require("./connect.cjs");
 
-const { postData, getData, getId ,updateData} = require("./module.cjs");
+const {
+  postData,
+  getData,
+  getId,
+  updateData,
+  providerSearch,
+} = require("./modules/providers.cjs");
+
+const {
+  getShopifyData,
+  getShopifyId,
+  postShopifyData,
+  updateShopifyData,
+  searchedData,
+} = require("./modules/shopify.cjs");
+const {
+  allData,
+  GetId,
+  postingData,
+  updatingData,
+  searchData,
+} = require("./modules/applications.cjs");
+const {
+  getauthenticationData,
+  getAuthentId,
+  postAuthentData,
+  updateAuthentData,
+  searchAuthent,
+} = require("./modules/authenticationproviders.cjs");
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 mongo.connect();
 
-//post the provider user data
+//endpoints for providers
+
 app.post("/post", postData);
 app.get("/get", getData);
-app.get("/get/:id",getId);
-app.put("/put/:id",updateData);
+app.get("/get/:id", getId);
+app.put("/put/:id", updateData);
+app.get("/searchprovider/:name", providerSearch);
 
+//endpoints for shopifystores
 
+app.get("/getshopify", getShopifyData);
+app.get("/getshopify/:id", getShopifyId);
+app.post("/postshopify", postShopifyData);
+app.put("/update/:id", updateShopifyData);
+app.get("/searched/:name", searchedData);
 
-// app.post("/adminsignup", adminSignup);
-// app.put("/adminchangepsw", adminChangePassword);
-// app.get("/countstaff", countStaff);
-// app.get('/countstudent',countStudent)
-// app.post("/addstaff", addNewStaff);
-// app.get("/viewstaff", viewStaff);
-// // staff login
-// app.post("/stafflogin", StaffLogin);
-// app.post("/addstudent", addStudent);
-// app.put("/staffchangepsw", staffChangePassword);
-// app.get("/viewstudent", viewStudent);
-// app.post('/markattendance',markAttendance)
-// app.get('/viewattendance',viewAttendance)
-// app.get('/viewleave',getLeaveApplication)
-// app.delete("/delete", delStudent);
+//endpoints for authentications
 
-// //student Login
-// app.post('/studentlogin',studentLogin)
-// app.post('/applyleave',applyLeave)
-// app.put('/studentchangepsw',studentChangePassword)
-// app.get('/myattendance',myAttendance)
+app.get("/getauthent", getauthenticationData);
+app.get("/getauthent/:id", getAuthentId);
+app.post("/postauthent", postAuthentData);
+app.put("/updateauthent/:id", updateAuthentData);
+app.get("/searcheauthent/:name", searchAuthent);
+
+//endpoints for applications
+
+app.get("/getapp", allData);
+app.get("/getapp/:id", GetId);
+app.post("/postapp", postingData);
+app.put("/updateapp/:id", updatingData);
+app.get("/getname/:name", searchData);
+
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server Started : 8000");
 });
