@@ -32,24 +32,19 @@ const {
   updateAuthentData,
   searchAuthent,
 } = require("./modules/authenticationproviders.cjs");
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-
 mongo.connect();
-
 //endpoints for providers
-app.get("/", home);
 app.get("/get/:limit/:skip", getData);
 app.get("/get/:id", getId);
-
 app.post("/post", postData);
 app.put("/put/:id", updateData);
 app.post("/searchprovider", providerSearch);
 
 //endpoints for shopifystores
-
+app.get("/", home);
 app.get("/getshopify/:limit/:skip", getShopifyData);
 app.get("/getshopify/:id", getShopifyId);
 app.post("/postshopify", postShopifyData);
