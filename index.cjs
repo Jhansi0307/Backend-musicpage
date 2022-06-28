@@ -16,6 +16,7 @@ const {
   postShopifyData,
   updateShopifyData,
   searchedData,
+  home,
 } = require("./modules/shopify.cjs");
 const {
   allData,
@@ -39,7 +40,7 @@ app.use(express.json());
 mongo.connect();
 
 //endpoints for providers
-app.get("/",home);
+app.get("/", home);
 app.get("/get/:limit/:skip", getData);
 app.get("/get/:id", getId);
 
