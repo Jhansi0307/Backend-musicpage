@@ -39,7 +39,7 @@ app.use(express.json());
 mongo.connect();
 
 //endpoints for providers
-
+app.get("/",home);
 app.get("/get/:limit/:skip", getData);
 app.get("/get/:id", getId);
 

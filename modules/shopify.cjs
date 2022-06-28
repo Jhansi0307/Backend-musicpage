@@ -4,6 +4,10 @@ const mongo = require("../connect.cjs");
 //---------------------------------------Getting Shopifystores data---------------------------//>
 
 // --- GET all data
+module.exports.home = async (req, res, next) => {
+  res.send("Welcome");
+};
+
 module.exports.getShopifyData = async (req, res, next) => {
   const Count1 = await mongo.db.collection("Shopify").find().count();
   const limit1 = req.params.limit;
