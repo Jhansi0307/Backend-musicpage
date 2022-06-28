@@ -5,8 +5,36 @@ const mongo = require("../connect.cjs");
 
 // --- GET all data
 module.exports.getData = async (req, res, next) => {
-  let data = await mongo.db.collection("Users").find().toArray();
+  // let data = await mongo.db.collection("Users").find().toArray();
+  const Count1 = await mongo.db.collection("Users").find().count();
+  const limit1 = req.params.limit;
+  const skip1 = req.params.skip;
+  console.log(limit1, skip1);
+  const authpro = await mongo.db
+    .collection("Users")
+    .find()
+    .limit(parseInt(limit1))
+    .skip(parseInt(skip1))
+    .toArray();
+  const data = {
+    count: Count1,
+    value: authpro,
+  };
+  console.log(data);
   res.send(data);
+  // module.exports.getData = async (request, response)=> {
+  //
+  //   console.log(Count1);
+  //   const limit1 = request.params.limit;
+  //   const skip1 = request.params.skip;
+  //   const authpro = await mongo.db.collection("Users").find().limit(parseInt(limit1)).skip(parseInt(skip1)).toArray();
+  // response.send(authpro);
+  //
+  // console.log(authpro);
+  // response.send(authpro);
+
+  //   // console.log(request.params.limit2)
+  //   // console.log(request.params.skip2)
 };
 
 // get the data by Id
@@ -27,7 +55,6 @@ module.exports.getId = async (req, res, next) => {
 
   // res.send(data);
 };
-
 //post the data
 module.exports.postData = async (req, res, next) => {
   const { name } = req.body;
@@ -62,16 +89,19 @@ module.exports.updateData = async (req, res, next) => {
   }
 };
 module.exports.providerSearch = async (req, res, next) => {
-  const id = req.params.name;
-
-  let data = await mongo.db
-    .collection("Users")
-
-    .find({ name: req.params.name })
-    .toArray();
-  console.log(data);
-  // console.log(id);
-  res.send(data);
+  const id = req.body.name;
+  const regex = new RegExp([id].join(""), "i");
+  try {
+    let data = await mongo.db
+      .collection("Users")
+      .find({ name: { $regex: regex } })
+      .toArray();
+    console.log(data);
+    // console.log(id);
+    res.send(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
   // console.log(data);
 
   // res.send(data);

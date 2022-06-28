@@ -1,12 +1,27 @@
 const { ObjectId } = require("mongodb");
 const mongo = require("../connect.cjs");
 
-//---------------------------------------Getting Providers data---------------------------//>
-
 // --- GET all data
 module.exports.allData = async (req, res, next) => {
-  let data = await mongo.db.collection("Application").find().toArray();
+  const Count1 = await mongo.db.collection("Application").find().count();
+  const limit1 = req.params.limit;
+  const skip1 = req.params.skip;
+  console.log(limit1, skip1);
+  const authpro = await mongo.db
+    .collection("Application")
+    .find()
+    .limit(parseInt(limit1))
+    .skip(parseInt(skip1))
+    .toArray();
+  const data = {
+    count: Count1,
+    value: authpro,
+  };
+  console.log(data);
   res.send(data);
+  // let data = await mongo.db.collection("Application").find().toArray();
+
+  // res.send(data);
 };
 
 // get the data by Id
@@ -58,15 +73,19 @@ module.exports.updatingData = async (req, res, next) => {
   }
 };
 module.exports.searchData = async (req, res, next) => {
-  const id = req.params.name;
-
-  let data = await mongo.db
-    .collection("Application")
-    .find({ name: req.params.name })
-    .toArray();
-  console.log(data);
-  // console.log(id);
-  res.send(data);
+  const id = req.body.name;
+  const regex = new RegExp([id].join(""), "i");
+  try {
+    let data = await mongo.db
+      .collection("Application")
+      .find({ name: { $regex: regex } })
+      .toArray();
+    console.log(data);
+    // console.log(id);
+    res.send(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
   // console.log(data);
 
   // res.send(data);

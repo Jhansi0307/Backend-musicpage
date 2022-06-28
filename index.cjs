@@ -40,35 +40,36 @@ mongo.connect();
 
 //endpoints for providers
 
-app.post("/post", postData);
-app.get("/get", getData);
+app.get("/get/:limit/:skip", getData);
 app.get("/get/:id", getId);
+
+app.post("/post", postData);
 app.put("/put/:id", updateData);
-app.get("/searchprovider/:name", providerSearch);
+app.post("/searchprovider", providerSearch);
 
 //endpoints for shopifystores
 
-app.get("/getshopify", getShopifyData);
+app.get("/getshopify/:limit/:skip", getShopifyData);
 app.get("/getshopify/:id", getShopifyId);
 app.post("/postshopify", postShopifyData);
 app.put("/update/:id", updateShopifyData);
-app.get("/searched/:name", searchedData);
+app.post("/searched", searchedData);
 
 //endpoints for authentications
 
-app.get("/getauthent", getauthenticationData);
+app.get("/getauthent/:limit/:skip", getauthenticationData);
 app.get("/getauthent/:id", getAuthentId);
 app.post("/postauthent", postAuthentData);
 app.put("/updateauthent/:id", updateAuthentData);
-app.get("/searcheauthent/:name", searchAuthent);
+app.post("/searcheauthent", searchAuthent);
 
 //endpoints for applications
 
-app.get("/getapp", allData);
+app.get("/getapp/:limit/:skip", allData);
 app.get("/getapp/:id", GetId);
 app.post("/postapp", postingData);
 app.put("/updateapp/:id", updatingData);
-app.get("/getname/:name", searchData);
+app.post("/getname", searchData);
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server Started : 8000");
